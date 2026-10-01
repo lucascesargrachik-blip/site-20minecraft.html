@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guia do Mundo Cúbico</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--sky:#8ecbff;--bg:#d9efc2;--card:#f4e4bc;--ink:#2b2013;--edge:#5a3d1e;--accent:#4caf3a;--accent2:#e8a21c;--sun:#ffd23f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky:#0b1030;--bg:#141a2b;--card:#232b45;--ink:#e8ecff;--edge:#0a0d1a;--accent:#7a5cff;--accent2:#3de0c4;--sun:#e8eaf6}}
+:root[data-theme="dark"]{--sky:#0b1030;--bg:#141a2b;--card:#232b45;--ink:#e8ecff;--edge:#0a0d1a;--accent:#7a5cff;--accent2:#3de0c4;--sun:#e8eaf6}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'VT323',monospace,sans-serif;font-size:22px;line-height:1.3;transition:background .5s,color .5s}
+h1,h2,h3,button,.tab{font-family:'Press Start 2P','Courier New',monospace}
+header{background:linear-gradient(var(--sky),var(--bg));position:relative;overflow:hidden;padding:24px 16px 70px;text-align:center;border-bottom:8px solid var(--edge);transition:background .5s}
+.orb{position:absolute;top:20px;left:12%;width:56px;height:56px;background:var(--sun);box-shadow:0 0 0 6px color-mix(in srgb,var(--sun) 40%,transparent);transition:all .8s}
+[data-theme="dark"] .orb,:root:not([data-theme="light"]) .orb.auto{}
+.stars{position:absolute;inset:0;opacity:0;transition:opacity .8s;background-image:radial-gradient(2px 2px at 10% 20%,#fff,transparent),radial-gradient(2px 2px at 40% 60%,#fff,transparent),radial-gradient(3px 3px at 70% 30%,#fff,transparent),radial-gradient(2px 2px at 85% 70%,#fff,transparent),radial-gradient(2px 2px at 55% 15%,#fff,transparent)}
+.cloud{position:absolute;top:50px;width:90px;height:24px;background:#fff;box-shadow:24px -16px 0 #fff,48px 0 0 #fff;opacity:.9;animation:drift 30s linear infinite;transition:opacity .8s}
+@keyframes drift{from{left:-150px}to{left:105%}}
+:root[data-theme="dark"] .stars{opacity:1}:root[data-theme="dark"] .cloud{opacity:0}:root[data-theme="dark"] .orb{left:80%;border-radius:0;box-shadow:inset -14px 0 0 #aab}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .stars{opacity:1}:root:not([data-theme="light"]) .cloud{opacity:0}:root:not([data-theme="light"]) .orb{left:80%;border-radius:0;box-shadow:inset -14px 0 0 #aab}}
+h1{position:relative;font-size:clamp(20px,5vw,40px);margin:60px 0 12px;text-shadow:4px 4px 0 var(--edge);color:#fff;line-height:1.4}
+header p{position:relative;font-size:26px;margin:0;color:#fff;text-shadow:2px 2px 0 var(--edge)}
+.grass{position:absolute;bottom:0;left:0;right:0;height:28px;background:repeating-linear-gradient(90deg,var(--accent) 0 32px,color-mix(in srgb,var(--accent) 80%,#000) 32px 64px)}
+.theme{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:9;font-size:11px;padding:10px 12px;cursor:pointer}
+button,.tab{cursor:pointer;color:var(--ink);background:var(--card);border:4px solid var(--edge);box-shadow:inset -4px -4px 0 rgba(0,0,0,.2),inset 4px 4px 0 rgba(255,255,255,.35);font-size:11px;padding:10px 12px}
+button:hover,button.on{background:var(--accent);color:#fff}
+button:active{transform:translateY(3px)}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:16px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:4px solid var(--edge)}
+nav a{text-decoration:none}
+main{max-width:1000px;margin:0 auto;padding:16px}
+section{margin:32px 0}
+h2{font-size:clamp(14px,3.5vw,20px);line-height:1.5;margin:0 0 16px;text-shadow:2px 2px 0 color-mix(in srgb,var(--accent) 50%,transparent)}
+.card{background:var(--card);border:4px solid var(--edge);box-shadow:6px 6px 0 var(--edge);padding:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.item{font-size:21px}.item b{font-size:42px;display:block}.item h3{font-size:11px;margin:6px 0;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.dim h3{font-size:13px;margin:0 0 8px}.dim{border-top:12px solid var(--c)}
+.ore{margin:12px 0}.ore span{font-size:21px}
+.track{position:relative;height:22px;background:repeating-linear-gradient(90deg,transparent 0 9.9%,rgba(0,0,0,.15) 10%) ,rgba(0,0,0,.2);border:3px solid var(--edge)}
+.range{position:absolute;top:0;bottom:0;background:var(--c);}
+.best{position:absolute;top:-4px;bottom:-4px;width:6px;background:#fff;border:2px solid var(--edge)}
+.scale{display:flex;justify-content:space-between;font-size:16px;opacity:.7}
+form{display:grid;gap:10px}label{font-size:20px}
+select,input{font:inherit;font-size:22px;padding:8px;border:4px solid var(--edge);background:var(--bg);color:var(--ink);width:100%}
+.two{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.out{min-height:60px;background:rgba(0,0,0,.12);border:3px dashed var(--edge);padding:10px;margin-top:6px}
+.out li{margin:4px 0}ul{padding-left:20px;margin:0}
+footer{text-align:center;padding:30px 16px;border-top:8px solid var(--edge);font-size:20px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:var(--bg);border:3px solid var(--edge);padding:4px 10px;font-size:21px}.enc li{margin:3px 0}</style>
+</head>
+<body>
+<button class="theme" id="theme" aria-label="Alternar dia e noite">☀️ Dia</button>
+<header>
+ <div class="stars"></div><div class="orb"></div><div class="cloud"></div><div class="cloud" style="top:90px;animation-delay:-14s"></div>
+ <h1>⛏️ GUIA DO MUNDO CÚBICO</h1>
+ <p>Itens, dimensões, minérios e trocas — para todas as idades!</p>
+ <div class="grass"></div>
+</header>
+<nav><a href="#itens"><button>Itens</button></a><a href="#dim"><button>Dimensões</button></a><a href="#min"><button>Minérios</button></a><a href="#trocas"><button>Trocas</button></a><a href="#enc"><button>Encantos</button></a><a href="#mobs"><button>Mobs</button></a><a href="#mods"><button>Mods</button></a></nav>
+<main>
+<section id="itens"><h2>🎒 Itens</h2>
+ <div class="filters" id="filters"></div><div class="grid" id="items"></div></section>
+
+<section id="dim"><h2>🌍 Dimensões</h2><div class="grid" id="dims" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))"></div></section>
+
+<section id="mods"><h2>🧩 Melhores Mods</h2><div class="grid" id="modslist"></div></section>
+
+<section id="min"><h2>💎 Melhores camadas (Y) dos minérios</h2>
+ <div class="card" id="ores"></div>
+ <p>Barra colorida = onde aparece. Marca branca = melhor altura. Cavernas e a versão 1.18+ do Java/Bedrock.</p></section>
+
+<section id="trocas"><h2>🤝 Sistema de trocas</h2>
+ <div class="two">
+ <div class="card"><h3>🧑‍🌾 Aldeões</h3>
+  <form id="vf"><label>Profissão<select id="prof"></select></label>
+  <label>Nível do aldeão<select id="lvl"><option value="0">1 – Novato</option><option value="1">2 – Aprendiz</option><option value="2">3 – Profissional</option><option value="3">4 – Especialista</option><option value="4">5 – Mestre</option></select></label>
+  <button>Ver trocas</button></form><div class="out" id="vout">Escolha uma profissão e clique em "Ver trocas".</div>
+  <p>Como funciona: o aldeão precisa do bloco de trabalho para ter profissão. Cada troca dá XP e ele sobe de nível; os preços sobem se você abusa de uma troca, mas "Herói da Aldeia" e curar aldeão zumbi dão descontos. Aldeões de roupa verde (Tolos) e sem profissão não trocam. Esmeralda = moeda!</p></div>
+ <div class="card"><h3>🐷 Piglins</h3>
+  <form id="pf"><label>Quantos lingotes de ouro você vai dar?<input id="gold" type="number" min="1" max="64" value="10"></label>
+  <button>Calcular chances</button></form><div class="out" id="pout">Informe os lingotes e clique em calcular.</div>
+  <p>Dica: use ouro na mão e fique de olho! Se estiver usando uma peça de armadura de ouro, eles não ficam bravos.</p></div>
+ </div></section>
+<section id="enc"><h2>✨ Encantamentos</h2><div class="grid" id="encs"></div></section>
+<section id="mobs"><h2>🐾 Mobs</h2><div class="filters" id="mf"></div><div class="card" id="mlist"></div></section>
+</main>
+<footer>Feito com ❤️ por fãs. Projeto não oficial, não afiliado à Mojang ou Microsoft.</footer>
+<script>
+const $=s=>document.querySelector(s);
+// Tema
+const root=document.documentElement,tb=$('#theme');
+function setT(t){root.dataset.theme=t;tb.textContent=t==='dark'?'🌙 Noite':'☀️ Dia';try{localStorage.setItem('mc',t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem('mc')}catch(e){}
+setT(saved||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+tb.onclick=()=>setT(root.dataset.theme==='dark'?'light':'dark');
+
+// Itens
+const items=[['⚔️','Espada de Diamante','Armas','Muito forte contra monstros.'],['⛏️','Picareta de Ferro','Ferramentas','Minera diamante e ouro.'],['🪓','Machado','Ferramentas','Corta árvores rapidinho.'],['🏹','Arco','Armas','Ataque à distância com flechas.'],['🛡️','Escudo','Armas','Bloqueia ataques e flechas.'],['🍖','Carne Cozida','Comida','Recupera bastante fome.'],['🍎','Maçã Dourada','Comida','Dá regeneração e absorção.'],['🍞','Pão','Comida','Feito com 3 trigos.'],['🧱','Tijolo','Blocos','Ótimo para construir casas.'],['🪵','Tábuas','Blocos','Base de quase tudo.'],['💎','Diamante','Minérios','Cria as melhores ferramentas.'],['🔴','Redstone','Minérios','Faz circuitos e máquinas.'],['🧭','Bússola','Ferramentas','Aponta para o ponto de spawn.'],['🔮','Pérola do Fim','Raros','Teletransporta onde cai.'],['🪶','Elytra','Raros','Asas para planar pelo céu.'],['🔥','Isqueiro','Ferramentas','Acende fogo e portais.']];
+let cat='Todos';
+function drawItems(){const cats=['Todos',...new Set(items.map(i=>i[2]))];
+$('#filters').innerHTML=cats.map(c=>`<button class="${c==cat?'on':''}" data-c="${c}">${c}</button>`).join('');
+$('#items').innerHTML=items.filter(i=>cat=='Todos'||i[2]==cat).map(i=>`<div class="card item"><b>${i[0]}</b><h3>${i[1]}</h3><small>${i[2]}</small><br>${i[3]}</div>`).join('');
+document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{cat=b.dataset.c;drawItems()})}
+drawItems();
+
+// Dimensões
+const dims=[['🌳 Superfície (Overworld)','#4caf3a','Onde você nasce! Tem florestas, cavernas, oceanos e aldeias. Altura de -64 a 320.','Portal: não precisa. Já é o ponto de partida.'],['🔥 Nether','#c0392b','Lava, fortalezas e piglins. Andar 1 bloco aqui = 8 na superfície. Tem Detrito Ancestral.','Portal: moldura de obsidiana 4x5 + isqueiro.'],['🌌 O Fim (End)','#7a5cff','Ilhas flutuantes e o Dragão do Fim. Cidades do Fim têm elytra!','Portal: encontrado na fortaleza, com 12 Olhos do Fim.'],['🌀 The Sift — 4ª dimensão','#d65ac8','Nova dimensão anunciada para Minecraft Java e Bedrock em 2027. Foi apresentada com áreas como Meadows e Carapace e terá novas criaturas, ambientes, blocos perigosos e regras próprias.','Disponibilidade no Minecraft original: 2027. Também aparece em Minecraft Dungeons II.'],['🌲 The Twilight Forest','#3f8f45','Dimensão de aventura com florestas, masmorras, estruturas, novos inimigos, itens e batalhas contra chefes.','Acessada por um portal próprio do mod.'],['☁️ The Aether','#67b7d1','Dimensão celestial com ilhas flutuantes, novos materiais, criaturas, masmorras e chefes.','Acessada pelo conteúdo do mod The Aether.'],['🥔 Potato Dimension','#d9b44a','Dimensão especial do April Fools 2024, criada como brincadeira temática de batata.','Conteúdo de April Fools; não faz parte das dimensões normais do Minecraft vanilla.']];
+$('#dims').innerHTML=dims.map(d=>`<div class="card dim" style="--c:${d[1]}"><h3>${d[0]}</h3><p>${d[2]}</p><b>${d[3]}</b></div>`).join('');
+const mods=[['🌲 The Twilight Forest','Dimensão de aventura com exploração, masmorras, estruturas, loot e chefes.'],['☁️ The Aether','Dimensão aérea com ilhas flutuantes, novos materiais, criaturas, masmorras e chefes.'],['🦎 Alex’s Mobs','Adiciona muitos animais e criaturas novas ao mundo, com foco em variedade e comportamento.'],['🌿 Biomes O’ Plenty','Expande a geração do mundo com muitos biomas e novos blocos e plantas.']];
+$('#modslist').innerHTML=mods.map(m=>`<div class="card item"><b>${m[0].split(' ')[0]}</b><h3>${m[0].replace(/^\\S+ /,'')}</h3><p>${m[1]}</p></div>`).join('');
+
+// Minérios (Y min, Y max, melhor Y)
+const ores=[['⚫ Carvão',0,320,96,'#444'],['🟠 Cobre',-16,112,48,'#e07b39'],['⚪ Ferro',-64,320,15,'#c9b8a8'],['🟡 Ouro',-64,32,-16,'#f2c200'],['🔴 Redstone',-64,15,-59,'#e0262b'],['🔵 Lápis-lazúli',-64,64,0,'#2f5fd1'],['💎 Diamante',-64,16,-59,'#2fd9d0'],['🟢 Esmeralda',-16,320,236,'#2fbf4a'],['🟤 Detrito (Nether)',8,22,15,'#7a4b3a']];
+const MIN=-64,MAX=320,pc=y=>(y-MIN)/(MAX-MIN)*100;
+$('#ores').innerHTML=ores.map(o=>{const n=o[0].includes('Nether');const mn=n?0:MIN,mx=n?128:MAX,p=y=>(y-mn)/(mx-mn)*100;
+return `<div class="ore"><span>${o[0]}: Y ${o[1]} a ${o[2]} — <b>melhor Y ${o[3]}</b></span><div class="track"><div class="range" style="--c:${o[4]};left:${p(o[1])}%;width:${p(o[2])-p(o[1])}%"></div><div class="best" style="left:calc(${p(o[3])}% - 3px)"></div></div><div class="scale"><span>${mn}</span><span>${mx}</span></div></div>`}).join('');
+
+// Aldeões
+const LV=['Novato','Aprendiz','Profissional','Especialista','Mestre'],XP=['0 XP','10 XP','70 XP','150 XP','250 XP'];
+const P=[
+['🌾 Fazendeiro','Composteira',['20 trigo → 1 esmeralda;26 batatas → 1 esmeralda;15 cenouras → 1 esmeralda;1 esmeralda → 6 pães','6 abóboras → 1 esmeralda;1 esmeralda → 4 maçãs;1 esmeralda → 6 tortas de abóbora','4 melancias → 1 esmeralda;3 esmeraldas → 18 cookies','1 esmeralda → 1 bolo;1 esmeralda → ensopados suspeitos','1 esmeralda → cenoura dourada;1 esmeralda → melancia brilhante']],
+['🥩 Açougueiro','Defumador',['14 frango cru → 1 esmeralda;7 carne de porco crua → 1 esmeralda;4 coelho cru → 1 esmeralda;1 esmeralda → 5 coelho cozido','15 carvão → 1 esmeralda;1 esmeralda → 8 costeletas cozidas','7 carne bovina crua → 1 esmeralda;4 carneiro cru → 1 esmeralda','1 bloco de alga seca → 1 esmeralda','10 bagas doces → 1 esmeralda']],
+['🎣 Pescador','Barril',['20 linhas → 1 esmeralda;10 carvão → 1 esmeralda;6 bacalhau cru + 1 esmeralda → 6 bacalhau cozido;3 esmeraldas → balde de bacalhau','15 bacalhau cru → 1 esmeralda;6 salmão cru + 1 esmeralda → 6 salmão cozido;2 esmeraldas → fogueira','13 salmão cru → 1 esmeralda;8 esmeraldas → vara de pescar encantada','8 peixe-tropical → 1 esmeralda','12 baiacus → 1 esmeralda;barcos (qualquer madeira) → 1 esmeralda']],
+['🏹 Flecheiro','Mesa de Flecheiro',['32 gravetos → 1 esmeralda;1 esmeralda → 16 flechas;10 sílex ← 1 cascalho + 1 esmeralda','26 sílex → 1 esmeralda;2 esmeraldas → arco','14 linhas → 1 esmeralda;3 esmeraldas → besta','24 penas → 1 esmeralda;arco encantado','8 gatilhos de arame → 1 esmeralda;besta encantada;flechas com poção']],
+['🧵 Pastor','Tear',['18 lã (qualquer cor) → 1 esmeralda;2 esmeraldas → tesoura','12 tintas → 1 esmeralda;1 esmeralda → lã colorida','1 esmeralda → cama colorida','1 esmeralda → bandeira colorida','2 esmeraldas → pintura']],
+['🧪 Clérigo','Suporte de Poções',['32 carne podre → 1 esmeralda;1 esmeralda → 2 redstone','3 lingotes de ouro → 1 esmeralda;1 esmeralda → 1 lápis-lazúli','2 pés de coelho → 1 esmeralda;4 esmeraldas → pedra luminosa','1 escama de tartaruga → 1 esmeralda;1 garrafa → 1 esmeralda;5 esmeraldas → pérola do Fim','22 verrugas do Nether → 1 esmeralda;3 esmeraldas → frasco de experiência']],
+['📚 Bibliotecário','Púlpito',['24 papéis → 1 esmeralda;9 esmeraldas → estante;5 a 64 esmeraldas → livro encantado','4 livros → 1 esmeralda;1 esmeralda → lanterna','5 sacos de tinta → 1 esmeralda;1 esmeralda → vidro','1 esmeralda → relógio;1 esmeralda → bússola;livro encantado','20 esmeraldas → etiqueta de nome']],
+['🗺️ Cartógrafo','Mesa de Cartografia',['24 papéis → 1 esmeralda;7 esmeraldas → mapa vazio','11 painéis de vidro → 1 esmeralda;13 esmeraldas + bússola → mapa do oceano','1 bússola → 1 esmeralda;14 esmeraldas + bússola → mapa da floresta','7 esmeraldas → moldura;3 esmeraldas → bandeiras coloridas','8 esmeraldas → padrão de bandeira globo']],
+['🧱 Pedreiro','Cortador de Pedra',['10 argila → 1 esmeralda;1 esmeralda → 10 tijolos','16 pedra → 1 esmeralda;1 esmeralda → 4 pedra polida','16 granito/diorito/andesito → 1 esmeralda;1 esmeralda → 4 versões polidas','12 quartzo → 1 esmeralda;1 esmeralda → terracota vitrificada','1 esmeralda → pilar de quartzo;1 esmeralda → bloco de quartzo']],
+['🥾 Peleteiro','Caldeirão',['6 couro → 1 esmeralda;2 esmeraldas → calça de couro;7 esmeraldas → túnica de couro','26 sílex → 1 esmeralda;5 esmeraldas → gorro de couro;4 esmeraldas → botas de couro','9 couro de coelho → 1 esmeralda;7 esmeraldas → túnica de couro','4 escamas de tartaruga → 1 esmeralda;6 esmeraldas → armadura de cavalo de couro','6 esmeraldas → sela;5 esmeraldas → gorro de couro']],
+['🛡️ Armeiro','Alto-forno',['15 carvão → 1 esmeralda;5 a 9 esmeraldas → peças de armadura de ferro','4 lingotes de ferro → 1 esmeralda;36 esmeraldas → sino;armadura de malha','1 balde de lava → 1 esmeralda;1 diamante → 1 esmeralda;esmeraldas → escudo','esmeraldas → calça e botas de diamante encantadas','esmeraldas → capacete e peitoral de diamante encantados']],
+['🔨 Ferramenteiro','Mesa de Ferramentas',['15 carvão → 1 esmeralda;1 esmeralda → machado, pá, picareta ou enxada de pedra','4 lingotes de ferro → 1 esmeralda;36 esmeraldas → sino','30 sílex → 1 esmeralda;6 esmeraldas → ferramentas de ferro encantadas','1 diamante → 1 esmeralda;12 esmeraldas → machado de diamante encantado','13 esmeraldas → picareta de diamante encantada']],
+['⚔️ Armeiro de Armas','Esmeril',['15 carvão → 1 esmeralda;3 esmeraldas → machado de ferro;7 esmeraldas → espada de ferro','4 lingotes de ferro → 1 esmeralda;36 esmeraldas → sino','24 sílex → 1 esmeralda','1 diamante → 1 esmeralda;esmeraldas → machado de diamante encantado','esmeraldas → espada de diamante encantada']]];
+P.forEach((p,i)=>$('#prof').add(new Option(p[0],i)));
+function vShow(){const p=P[$('#prof').value],l=+$('#lvl').value;
+$('#vout').innerHTML=`<b>${p[0]}</b> — bloco de trabalho: <b>${p[1]}</b><br>Nível ${l+1}: ${LV[l]} (a partir de ${XP[l]})<ul>`+p[2][l].split(';').map(x=>`<li>${x}</li>`).join('')+'</ul><small>Itens de exemplo, a lista exata varia por versão e sorte.</small>'}
+$('#vf').onsubmit=e=>{e.preventDefault();vShow()};$('#prof').onchange=$('#lvl').onchange=vShow;vShow();
+
+// Piglins
+const loot=[['Obsidiana',8.7],['Obsidiana chorona',8.7],['Bola de fogo',8.7],['Areia das almas',8.7],['Couro',8.7],['Cascalho',8.7],['Linha',4.4],['Quartzo do Nether',4.4],['Pepitas de ferro',2.2],['Pérola do Fim',2.2],['Botas de ferro (Alma Veloz)',1.7],['Livro encantado',1.1]];
+$('#pf').onsubmit=e=>{e.preventDefault();const n=Math.max(1,Math.min(64,+$('#gold').value||1));
+$('#pout').innerHTML=`Com <b>${n}</b> lingotes, você pode esperar (aprox.):<ul>`+loot.map(l=>`<li>${l[0]}: ${l[1]}% → ~${(l[1]*n/100).toFixed(1)} vez(es)</li>`).join('')+'</ul>'};
+
+// Encantamentos
+const E={'🛡️ Armaduras':'Proteção IV·Proteção contra Fogo IV·Proteção contra Explosão IV·Proteção contra Projéteis IV·Queda de Pena IV·Respiração III·Afinidade Aquática I·Espinhos III·Passo Profundo III·Andar no Gelo II·Velocidade da Alma III·Furtividade Veloz III','⚔️ Espadas e Machados':'Afiação V·Julgamento V·Ruína dos Artrópodes V·Repulsão II·Aspecto Flamejante II·Pilhagem III·Fio Varredor III','⛏️ Ferramentas':'Eficiência V·Toque Suave I·Fortuna III·Inquebrável III·Reparação I','🏹 Arco e Besta':'Força V·Impacto II·Chama I·Infinidade I·Multidisparo I·Perfuração IV·Carga Rápida III','🔱 Tridente, Maça e Pesca':'Lealdade III·Empalamento V·Correnteza III·Condutividade I·Densidade V·Rompimento IV·Rajada de Vento III·Sorte do Mar III·Isca III','💀 Maldições':'Maldição do Vínculo I·Maldição do Desaparecimento I'};
+$('#encs').innerHTML=Object.entries(E).map(([k,v])=>`<div class="card enc"><h3 style="font-size:12px;line-height:1.5">${k}</h3><ul>${v.split('·').map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+// Mobs
+const M={'😊 Pacíficos':'🌲 Deermouse (Twilight Forest)·☁️ Moa (Aether)·🐄 Vaca·🍄 Vaca-cogumelo·🐖 Porco·🐑 Ovelha·🐔 Galinha·🐇 Coelho·🐟 Peixes·🦑 Lula·🐬 Golfinho·🐢 Tartaruga·🐸 Sapo·🦎 Axolote·🐼 Panda·🦊 Raposa·🐻‍❄️ Urso-polar·🐝 Abelha·🐐 Cabra·🦇 Morcego·🐆 Ocelote·🌱 Sniffer·🦔 Tatu·🌋 Strider·🧑‍🌾 Aldeão·🧳 Mercador Andarilho·☃️ Golem de Neve·🤖 Golem de Ferro·🧚 Allay','🐾 Pets':'🦌 Bighorn Sheep (Twilight Forest)·🦅 Moa (Aether)·🐺 Lobo (osso)·🐱 Gato (peixe cru)·🦜 Papagaio (sementes)·🐴 Cavalo (monte até domar)·🫏 Burro·🐴 Mula·🦙 Lhama·🐪 Camelo (cavalgável)','👹 Monstros':'🌲 Swarm Spider (Twilight Forest)·👻 Lich Minion (Twilight Forest)·🌀 Slider (Aether)·🧟 Zumbi·💀 Esqueleto·💥 Creeper·🕷️ Aranha·🕸️ Aranha da Caverna·🟣 Enderman·🧙 Bruxa·🟢 Slime·🌋 Cubo de Magma·👻 Ghast·🔥 Blaze·🐷 Piglin·🪓 Piglin Brutamontes·🐗 Hoglin·🧟 Zoglin·☠️ Esqueleto Wither·🌊 Afogado·🏜️ Husk·❄️ Stray·🦇 Phantom·🏹 Saqueador·🪓 Vindicador·🔮 Invocador·🦏 Devastador·🧿 Vex·🧙‍♂️ Ilusionista·🐟 Guardião·📦 Shulker·🪲 Endermite·🐛 Traça-de-prata·🟢 Bogged·💨 Breeze·🌳 Creaking','👑 Chefes':'🌲 Naga (Twilight Forest)·🧙 Twilight Lich (Twilight Forest)·🐲 Hydra (Twilight Forest)·👻 Ur-Ghast (Twilight Forest)·❄️ Snow Queen (Twilight Forest)·🪨 Slider (Aether)·👸 Valkyrie Queen (Aether)·☀️ Sun Spirit (Aether)·🐉 Dragão do Fim (no Fim)·🖤 Wither (4 areias da alma + 3 caveiras)·👁️ Guardião Ancião (mini-chefe do monumento)·🔔 Warden (mini-chefe da Cidade Ancestral)'};
+let mc='😊 Pacíficos';
+function drawM(){$('#mf').innerHTML=Object.keys(M).map(k=>`<button class="${k==mc?'on':''}" data-k="${k}">${k}</button>`).join('');
+$('#mlist').innerHTML='<div class="chips">'+M[mc].split('·').map(x=>`<span class="chip">${x}</span>`).join('')+'</div>';
+document.querySelectorAll('#mf button').forEach(b=>b.onclick=()=>{mc=b.dataset.k;drawM()})}
+drawM();
+</script>
+</body>
+</html>
